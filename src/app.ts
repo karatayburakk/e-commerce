@@ -5,6 +5,7 @@ import express from 'express';
 import morgan from 'morgan';
 import { AppDataSource } from './data-source';
 import { rootRouter } from './routes/root.router';
+import { productRouter } from './routes/product.router';
 
 const app = express();
 app.use(morgan('dev'));
@@ -15,6 +16,8 @@ const port = process.env.APP_PORT ? +process.env.APP_PORT : 80;
 
 function setupExpress(): void {
 	app.use('/', rootRouter);
+
+	app.use('/products', productRouter);
 }
 
 async function startApp(): Promise<void> {
