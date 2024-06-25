@@ -1,4 +1,5 @@
 import { DataSource } from 'typeorm';
+import { Product } from './entities/product.entity';
 
 const port = parseInt(process.env.DB_PORT || '5432');
 
@@ -11,4 +12,5 @@ export const AppDataSource = new DataSource({
 	database: process.env.DB_NAME,
 	synchronize: true,
 	logging: true,
+	entities: [Product],
 });
