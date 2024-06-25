@@ -4,6 +4,7 @@ import 'reflect-metadata';
 import express from 'express';
 import morgan from 'morgan';
 import { AppDataSource } from './data-source';
+import { rootRouter } from './routes/root.router';
 
 const app = express();
 app.use(morgan('dev'));
@@ -11,6 +12,10 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 const port = process.env.APP_PORT ? +process.env.APP_PORT : 80;
+
+function setupExpress(): void {
+	app.use('/', rootRouter);
+}
 
 async function startApp(): Promise<void> {
 	try {
@@ -21,7 +26,7 @@ async function startApp(): Promise<void> {
 		process.exit(1);
 	}
 
-	// setupExpress();
+	setupExpress();
 
 	app.listen(port, () => {
 		console.log(`App is now running at http://locahost:${port}`);
@@ -29,6 +34,3 @@ async function startApp(): Promise<void> {
 }
 
 startApp();
-// app.listen(port, () => {
-// 	console.log(`App is now running at port: ${port}`);
-// });
