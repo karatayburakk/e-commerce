@@ -1,15 +1,16 @@
 import { Request, Response } from 'express';
 import * as productService from '../services/product.service';
+import { catchAsync } from '../utils/catch-async';
 
-export const getAll = async (req: Request, res: Response) => {
+export const getAll = catchAsync(async (req: Request, res: Response) => {
 	const products = await productService.getAll();
 
 	return res.status(200).json({
 		products,
 	});
-};
+});
 
-export const create = async (req: Request, res: Response) => {
+export const create = catchAsync(async (req: Request, res: Response) => {
 	const payload = req.body;
 
 	const product = await productService.create(payload);
@@ -17,9 +18,9 @@ export const create = async (req: Request, res: Response) => {
 	return res.status(201).json({
 		product,
 	});
-};
+});
 
-export const getById = async (req: Request, res: Response) => {
+export const getById = catchAsync(async (req: Request, res: Response) => {
 	const id = +req.params.id;
 
 	const product = await productService.getById(id);
@@ -27,9 +28,9 @@ export const getById = async (req: Request, res: Response) => {
 	return res.status(200).json({
 		product,
 	});
-};
+});
 
-export const updateById = async (req: Request, res: Response) => {
+export const updateById = catchAsync(async (req: Request, res: Response) => {
 	const id = +req.params.id;
 	const payload = req.body;
 
@@ -38,12 +39,12 @@ export const updateById = async (req: Request, res: Response) => {
 	return res.status(200).json({
 		product,
 	});
-};
+});
 
-export const deleteById = async (req: Request, res: Response) => {
+export const deleteById = catchAsync(async (req: Request, res: Response) => {
 	const id = +req.params.id;
 
 	await productService.deleteById(id);
 
 	return res.status(204).send();
-};
+});

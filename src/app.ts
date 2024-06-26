@@ -1,11 +1,13 @@
 import dotenv from 'dotenv';
 dotenv.config();
 import 'reflect-metadata';
-import express from 'express';
+import express, { Request, Response, NextFunction } from 'express';
 import morgan from 'morgan';
 import { AppDataSource } from './data-source';
 import { rootRouter } from './routes/root.router';
 import { productRouter } from './routes/product.router';
+import { globalErrorHandler } from './utils/global-error-handler';
+import { AppError } from './utils/AppError';
 
 const app = express();
 app.use(morgan('dev'));
@@ -18,6 +20,12 @@ function setupExpress(): void {
 	app.use('/', rootRouter);
 
 	app.use('/products', productRouter);
+
+	app.all('*', (req: Request, _res: Response, next: NextFunction): void => {
+		return next(new AppError(`Can't find ${req.originalUrl} on this server`, 404));
+	});
+
+	app.use(globalErrorHandler);
 }
 
 async function startApp(): Promise<void> {
